@@ -1,26 +1,65 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { sha224 } from 'js-sha256';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class Emails extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    console.dir(this);
+    this.props.onLinesChange(event.target.value);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <div className="col">
+        <form onSubmit={this.handleSubmit}>
+          <textarea value={this.props.lines} onChange={this.handleChange} rows="30" placeholder={this.props.placeholder} />
+        </form>
+      </div>
+    );
+  }
 }
 
-export default App;
+class Converter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onLinesChange = this.onLinesChange.bind(this);
+    this.state = {
+      emails: '',
+      hashes: ''
+    };
+  }
+
+  onLinesChange(text) {
+    this.setState({emails:text, hashes:text.split('\n').map(sha224).join('\n')});
+  }
+
+  render() {
+
+    return (
+        <div className="row">
+          <Emails lines={this.state.emails} onLinesChange={this.onLinesChange} placeholder="Plak hier de e-mailadressen..."></Emails>→
+          <Emails lines={this.state.hashes} onLinesChange={this.onLinesChange} placeholder="Kopieer daarna hier de code om bij te houden."></Emails>
+        </div>
+    );
+  }
+}
+
+  class App extends React.Component {
+    render() {
+      return (
+          <Converter />
+      );
+    }
+  }
+  export default App;
