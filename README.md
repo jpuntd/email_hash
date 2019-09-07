@@ -1,3 +1,3 @@
-converts a series of email entered in a form to sha224 hashes
+converts a series of email adresses entered in a form to sha224 hashes
 
-[DEMO](https://snwclone.github.io/email_hash/)
+[DEMO](https://jpuntd.github.io/email_hash/)
